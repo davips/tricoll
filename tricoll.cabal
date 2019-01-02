@@ -51,16 +51,17 @@ executable tricoll
   main-is:             Main.hs
   
   -- Modules included in this executable, other than Main.
-  --other-modules:       Debug.hs
+  other-modules:       Draw Physics World Debug
   
   -- LANGUAGE extensions used by modules in this package.
   -- other-extensions:    
   
   -- Other library packages from which modules are imported.
-  build-depends:       not-gloss >= 0.7.6.2,
-                       linear >= 1.3.1,
-                       base >=4.9 && <4.10,
-                       pretty-show
+  build-depends:       not-gloss,
+                       linear,
+                       base,
+                       pretty-show,
+                       parallel
   
   -- Directories containing source files.
   hs-source-dirs:      src

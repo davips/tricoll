@@ -17,10 +17,10 @@ state0 = State 0 balls
 simFun :: Float -> State -> State
 simFun tFloat (State t0 objs0) = State t objs
   where
-    t = realToFrac tFloat
+    t = realToFrac tFloat    
     dt = t - t0
     objs = advance dt objs0
     
 main :: IO ()
 main = do
-  simulate (defaultOpts {optWindowName = "simulate test"}) 0.05 state0 drawFun simFun
+  simulate (defaultOpts {optWindowName = "simulate test"}) (1 / fps) state0 drawFun simFun
