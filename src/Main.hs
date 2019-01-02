@@ -12,7 +12,7 @@ import World
 import Vis
 
 state0 :: State
-state0 = State 0 balls                
+state0 = State 0 world
 
 simFun :: Float -> State -> State
 simFun tFloat (State t0 objs0) = State t objs
