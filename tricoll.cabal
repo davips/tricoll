@@ -61,7 +61,8 @@ executable tricoll
                        linear,
                        base,
                        pretty-show,
-                       parallel
+                       parallel,
+                       deepseq
   
   -- Directories containing source files.
   hs-source-dirs:      src

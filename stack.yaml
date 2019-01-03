@@ -21,7 +21,7 @@ resolver: lts-12.26
 ghc-options:
     "$locals": -Wall
     "$targets": -Werror
-    "$everything": -O3 #-threaded -with-rtsopts=-N
+    "$everything": -O3 -threaded -with-rtsopts=-N
 #    "$everything": -fllvm -pgmlo /usr/bin/opt-5.0 -pgmlc /usr/bin/llc-5.0    
 # User packages to be built.
 # Various formats can be used as shown in the example below.

@@ -3,7 +3,7 @@ import Linear
 import World
 import Data.Maybe
 import Data.List
--- import Control.Parallel.Strategies(rpar, runEval)
+import Control.Parallel.Strategies(parMap, rdeepseq)
 -- import Debug
 
 hit :: Obj -> Obj -> Hit    
@@ -36,7 +36,8 @@ hit (Wall _ _) _ = error "Walls are not allowed in the first argument of hit!"
 --     return as' ++ bs'
 --     where
 --         (as, bs) = splitAt (length xs / 2) xs
-                         
+
+
 advance :: Double -> [Obj] -> [Obj]
 advance dt objs
     | dt < 0 = error "time travel detected!"
@@ -45,8 +46,9 @@ advance dt objs
 --     | otherwise =  d2 (map (\x -> (idn $ ballA x, idn $ ballB x, fo $ timeLeft x)) hits) $ map (walk dt) objs
     | otherwise = map (walk dt) $ objs
     where
-        hits0 = [(a, b) | a <- objs, b <- objs ++ walls, oid a < oid b] -- TODO: should permutations be generated more efficiently?
-        hits = map (uncurry hit) hits0
+--         hits = parMap rdeepseq id [hit a b | a <- objs, b <- objs ++ walls, oid a < oid b]
+        hits = concat $ parMap rdeepseq (\a -> [hit a b | b <- objs ++ walls, oid a < oid b]) objs
+--         hits = [hit a b | a <- objs, b <- objs ++ walls, oid a < oid b]
         timeToHit = minimum $ map timeLeft hits
         nextHits = filter (\h -> timeLeft h == timeToHit) hits -- TODO: do take advantage of precalculated hits? there are a lot of them that are non-affected by the very next hit (nextHits)
  
@@ -75,7 +77,7 @@ doHit (Ball ia ra ma pa va) (Ball ib rb mb pb vb) = [walk (0.00000001) $ Ball ia
         bOut = (abUnit `dot` vb) *^ abUnit
         va' = va - aOut + bOut
         vb' = vb - bOut + aOut
-doHit (Ball ia ra ma pa va) (Wall _ n) = {-d2 (error "bateu!" :: Double) -}[walk (0.00000001) $ Ball ia ra ma pa (va * ((V3 1 1 1) - 2*n*n))]
+doHit (Ball ia ra ma pa va) (Wall _ n) = {-d2 (error "bateu!" :: Double)-} [walk (0.00000001) $ Ball ia ra ma pa (va * ((V3 1 1 1) - 2*n*n))]
 doHit (Wall _ _) _ = error "Walls are not allowed in the first argument of doHit!"
 
 walk :: Double -> Obj -> Obj

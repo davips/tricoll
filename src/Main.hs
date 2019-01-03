@@ -1,9 +1,10 @@
 {-# OPTIONS_GHC -Wall #-}
 {-
 TODO
- add gravity
- ball generator (auto mass calculator)
+ create data structure to avoid useless recalculation of distant collisions (using arrays or minheap? implement in C or Haskell?)
  consider mass in collisions
+ ball generator with auto mass calculator
+ add gravity
 -}
 module Main where
 import Draw
