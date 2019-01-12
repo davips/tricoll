@@ -19,7 +19,7 @@ hit a@(Ball _ ra _ pa va) b@(Ball _ rb _ pb vb) = Hit a b t
         sqrtDelta =  if delta <= 0 then 1/0 else sqrt delta
         tp = (-2 * abv + sqrtDelta) / (2 * vv)
         tn = (-2 * abv - sqrtDelta) / (2 * vv)
-        t = 0.99999999 * min (positivate tp) (positivate tn) -- report a bit less than the required time to avoid one object exceding the boundary of the other due to floating point precision issues
+        t = 0.999999 * min (positivate tp) (positivate tn) -- report a bit less than the required time to avoid one object exceding the boundary of the other due to floating point precision issues
 hit a@(Ball _ ra _ pa va) b@(Wall _ n) = Hit a b time
     where 
         projP = pa `dot` n
@@ -73,3 +73,18 @@ doHit (Wall _ _) _ = error "Walls are not allowed in the first argument of doHit
 walk :: Double -> Obj -> Obj
 walk dt (Ball i r m p v) = Ball i r m (p + (dt) *^ v) (v + g ^* dt)
 walk _ w@(Wall _ _) = w
+
+kenergy :: [Obj] -> Double
+kenergy objs = sum $ map ke objs
+    where
+        ke (Ball _ _ m _ v) = abs $ m * (norm v) ^ 2 / 2
+
+penergy :: [Obj] -> Double
+penergy objs = sum $ map pe objs
+    where
+        pe (Ball _ r m (V3 _ y _) _) = abs $ m * (norm g) * (200 + y - r)
+
+{-qmov :: [Obj] -> Double
+qmov objs = sum $ map ke objs
+    where
+        ke (Ball _ _ m _ v) = abs $ m * (norm v) ^ 2 / 2-}        

@@ -1,7 +1,7 @@
 # Revision history for tricoll
 
 ## TODO
-* fix increase of energy/speed during simulation
+* fix increase of total energy (kinetic + potential) during simulation with gravity (at least, kinectic stays constant withou gravity)
 * add friction (loss of energy as heat in collisions)
 * optimize
     use min(Ax-Bx, Ay-By) / (Va-Vb) as a rough estimate of t
@@ -11,8 +11,8 @@
     create hierarchies of balls to allow calculation of macro collisions and avoid unneeded calculations among macroballs
     define cubes (parallel to the axes) that enclose groups of balls and allow the use of the concept of neighborhood to reduce calculations among balls that are far from each other
 * ball generator with auto mass calculator
-* discover why calls to simFun are not sequential (is it because of slow iterations?) and FPS estimate is wrong
-* check if the sollution for escaping balls has any drawback (t = 0.99999999 * ...)
+* discover why calls to simFun are not sequential (is it because of slow iterations? bug in not-gloss) and FPS estimate is wrong
+* check if the sollution for escaping balls has any drawback (t = 0.999999 * ...)
 
 ## 0.1.0.2  -- 2019-01-12
 * add gravity
