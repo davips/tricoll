@@ -15,7 +15,7 @@ simFun tFloat (State t0 objs0 frames) = State t objs $ frames + 1
   where
     t = float2Double tFloat    
     dt = if t < 1000000 then t - t0 else error "interrompido!"
-    objs = d2 (kenergy objs0 / 1000 + penergy objs0 / 1000) $ advance dt objs0 -- TODO: dt should work here, but the calls to simFun are not sequential; bug in not-gloss?
+    objs = d2 (kenergy objs0 / 1000 + penergy objs0 / 1000) $ advance 0.05 objs0 -- TODO: dt should work here, but the calls to simFun are not sequential; bug in not-gloss?
 
 myOptions :: Options
 myOptions = defaultOpts {optWindowName = "tricoll", optInitialCamera = Just $ Camera0 90 (-90) 750}

@@ -1,7 +1,6 @@
 # Revision history for tricoll
 
 ## TODO
-* fix increase of total energy (kinetic + potential) during simulation with gravity (at least, kinectic stays constant withou gravity)
 * add friction (loss of energy as heat in collisions)
 * optimize
     use min(Ax-Bx, Ay-By) / (Va-Vb) as a rough estimate of t
@@ -15,6 +14,7 @@
 * check if the sollution for escaping balls has any drawback (t = 0.999999 * ...)
 
 ## 0.1.0.2  -- 2019-01-12
+* fix increase of total energy (kinetic + potential) during simulation with gravity (a * dt^2 / 2 was missing)
 * add gravity
 * new dimensions to accomodate the real value of gravity
 

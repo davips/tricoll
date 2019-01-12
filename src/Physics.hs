@@ -71,7 +71,7 @@ doHit (Ball ia ra ma pa va) (Wall _ n) = {-d2 (error "bateu!" :: Double)-} [Ball
 doHit (Wall _ _) _ = error "Walls are not allowed in the first argument of doHit!"
 
 walk :: Double -> Obj -> Obj
-walk dt (Ball i r m p v) = Ball i r m (p + (dt) *^ v) (v + g ^* dt)
+walk dt (Ball i r m p v) = Ball i r m (p + (dt) *^ v + g ^* (dt^2/2)) (v + (g ^* dt))
 walk _ w@(Wall _ _) = w
 
 kenergy :: [Obj] -> Double
@@ -82,7 +82,7 @@ kenergy objs = sum $ map ke objs
 penergy :: [Obj] -> Double
 penergy objs = sum $ map pe objs
     where
-        pe (Ball _ r m (V3 _ y _) _) = abs $ m * (norm g) * (200 + y - r)
+        pe (Ball _ r m (V3 _ y _) _) = abs $ m * (norm g) * ((width / 2) + y - r)
 
 {-qmov :: [Obj] -> Double
 qmov objs = sum $ map ke objs
