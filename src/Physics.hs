@@ -45,7 +45,7 @@ advance dt objs
         nextHits = filter (\h -> timeLeft h == timeToHit) hits -- TODO: do take advantage of precalculated hits? there are a lot of them that are non-affected by the very next hit (nextHits)
  
 positivate :: Double -> Double
-positivate t = if t <= 0.00000000001 then 1 / 0 else t -- when the objects are too close, the hit may be skipped
+positivate t = if t <= 0 then 1 / 0 else t -- when the objects are too close, the hit may be skipped
 
 doHits :: [Hit] -> [Obj] -> [Obj]
 doHits [] objs = objs

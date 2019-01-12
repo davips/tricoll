@@ -15,6 +15,9 @@ data Hit = Hit {objA :: Obj, objB :: Obj, timeLeft :: Double} deriving (Show, Ge
 width :: Double
 width = 3
 
+g :: Double
+g = 9.80665
+
 world :: [Obj]
 world = sphere 10 0.8 0.08 ++ [Ball (1) 0.25 ((4/3) * pi * 0.25^3) (V3 (-1) (-1) (-0.2)) (V3 (0.5) 0.75 0.04)]  -- ++ balls 0 -- ++ sphere 5000 0.1 0.04 ++ sphere 10000 0.15 0.2 ++ sphere 15000 0.15 0.01
 
