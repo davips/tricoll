@@ -71,5 +71,5 @@ doHit (Ball ia ra ma pa va) (Wall _ n) = {-d2 (error "bateu!" :: Double)-} [Ball
 doHit (Wall _ _) _ = error "Walls are not allowed in the first argument of doHit!"
 
 walk :: Double -> Obj -> Obj
-walk dt (Ball i r m p v) = Ball i r m (p + (dt) *^ v) (v + g)
+walk dt (Ball i r m p v) = Ball i r m (p + (dt) *^ v) (v + g ^* dt)
 walk _ w@(Wall _ _) = w
