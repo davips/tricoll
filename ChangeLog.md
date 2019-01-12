@@ -1,7 +1,8 @@
 # Revision history for tricoll
 
 ## TODO
-* add friction (loss of energy as heat in collisions)
+* elasticity < 1 causes hits to fail, maybe  a resting state is needed for very slow hits
+* elasticity should affect only the normal component when colliding to a wall, not the whole speed vector
 * optimize
     use min(Ax-Bx, Ay-By) / (Va-Vb) as a rough estimate of t
     adopt a grid that indexes the positions to exclude non-neighbors from hit calculations (limit speed to guarantee no phantom balls)
@@ -17,6 +18,7 @@
 * fix increase of total energy (kinetic + potential) during simulation with gravity (a * dt^2 / 2 was missing)
 * add gravity
 * new dimensions to accomodate the real value of gravity
+* add friction (loss of energy as heat in collisions)
 
 ## 0.1.0.1  -- 2019-01-12
 * consider mass in collisions (http://www.gamasutra.com/view/feature/3015/pool_hall_lessons_fast_accurate_.php?page=3)

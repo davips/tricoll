@@ -19,7 +19,7 @@ hit a@(Ball _ ra _ pa va) b@(Ball _ rb _ pb vb) = Hit a b t
         sqrtDelta =  if delta <= 0 then 1/0 else sqrt delta
         tp = (-2 * abv + sqrtDelta) / (2 * vv)
         tn = (-2 * abv - sqrtDelta) / (2 * vv)
-        t = 0.999999 * min (positivate tp) (positivate tn) -- report a bit less than the required time to avoid one object exceding the boundary of the other due to floating point precision issues
+        t = min (positivate tp) (positivate tn)
 hit a@(Ball _ ra _ pa va) b@(Wall _ n) = Hit a b time
     where 
         projP = pa `dot` n
@@ -44,8 +44,8 @@ advance dt objs
         timeToHit = minimum $ map timeLeft hits
         nextHits = filter (\h -> timeLeft h == timeToHit) hits -- TODO: do take advantage of precalculated hits? there are a lot of them that are non-affected by the very next hit (nextHits)
  
-positivate :: Double -> Double
-positivate t = if t <= 0 then 1 / 0 else t -- when the objects are too close, the hit may be skipped
+positivate :: Double -> Double -- report a bit less than the required time to avoid one object exceding the boundary of the other due to floating point precision issues
+positivate t = if t <= 0 then 1 / 0 else 0.999999 * t -- when the objects are too close, the hit may be skipped
 
 doHits :: [Hit] -> [Obj] -> [Obj]
 doHits [] objs = objs
@@ -64,14 +64,19 @@ doHit (Ball ia ra ma pa va) (Ball ib rb mb pb vb) = [Ball ia ra ma pa va', Ball 
         abUnit = ab ^/ norm ab
         uva = abUnit `dot` va
         uvb = abUnit `dot` vb
-        p = 2 * (uva - uvb) / (ma + mb)
+        p = elasticity * 2 * (uva - uvb) / (ma + mb)
         va' = va - p * mb *^ abUnit
         vb' = vb + p * ma *^ abUnit
-doHit (Ball ia ra ma pa va) (Wall _ n) = {-d2 (error "bateu!" :: Double)-} [Ball ia ra ma pa (va * ((V3 1 1 1) - 2*n*n))]
+doHit (Ball ia ra ma pa va) (Wall _ n) = {-d2 (error "bateu!" :: Double)-} [Ball ia ra ma pa (elasticity *^ va * ((V3 1 1 1) - 2*n*n))]
 doHit (Wall _ _) _ = error "Walls are not allowed in the first argument of doHit!"
 
 walk :: Double -> Obj -> Obj
-walk dt (Ball i r m p v) = Ball i r m (p + (dt) *^ v + g ^* (dt^2/2)) (v + (g ^* dt))
+walk dt (Ball i r m p v) = Ball i r m p' v'
+    where
+        p' = p + (dt) *^ v + g ^* (dt^2/2)
+        v0 = v + (g ^* dt)
+        v' = v0
+--         v' = if norm v0 < 0.00000001 then V3 0 0 0 else v'
 walk _ w@(Wall _ _) = w
 
 kenergy :: [Obj] -> Double
