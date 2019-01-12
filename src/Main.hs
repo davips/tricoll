@@ -16,7 +16,10 @@ simFun tFloat (State t0 objs0 frames) = State t objs $ frames + 1
     t = float2Double tFloat    
     dt = if t < 1000000 then t - t0 else error "interrompido!"
     objs = advance dt objs0
-    
+
+myOptions :: Options
+myOptions = defaultOpts {optWindowName = "tricoll", optInitialCamera = Just $ Camera0 90 (-90) 750}
+
 main :: IO ()
 main = do
-  simulate (defaultOpts {optWindowName = "simulate test"}) (1 / fps) state0 drawFun simFun
+  simulate myOptions (1 / fps) state0 drawFun simFun

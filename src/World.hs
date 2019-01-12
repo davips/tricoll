@@ -13,13 +13,13 @@ data State = State Double [Obj] Int
 data Hit = Hit {objA :: Obj, objB :: Obj, timeLeft :: Double} deriving (Show, Generic, NFData)
 
 width :: Double
-width = 3
+width = 400
 
-g :: Double
-g = 9.80665
+g :: V3 Double
+g = V3 0 (-9.80665) 0
 
 world :: [Obj]
-world = sphere 10 0.8 0.08 ++ [Ball (1) 0.25 ((4/3) * pi * 0.25^3) (V3 (-1) (-1) (-0.2)) (V3 (0.5) 0.75 0.04)]  -- ++ balls 0 -- ++ sphere 5000 0.1 0.04 ++ sphere 10000 0.15 0.2 ++ sphere 15000 0.15 0.01
+world = sphere 10 80 8 ++ [Ball (1) 20 ((4/3) * pi * 0.25^3) (V3 (0.1) (0) (0)) (V3 (0) 0 0)] -- ++ balls 0 -- ++ sphere 5000 0.1 0.04 ++ sphere 10000 0.15 0.2 ++ sphere 15000 0.15 0.01
 
 sphere :: Int -> Double -> Double -> [Obj]
 sphere idn rad atomR = ring idn rad atomR
