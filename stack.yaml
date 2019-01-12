@@ -20,8 +20,8 @@
 resolver: lts-12.26
 ghc-options:
     "$locals": -Wall
-    "$targets": -Werror
-    "$everything": -O3 -threaded -with-rtsopts=-N
+    "$targets": -Wall
+    "$everything": -O2 -threaded -rtsopts -with-rtsopts=-N
 #    "$everything": -fllvm -pgmlo /usr/bin/opt-5.0 -pgmlc /usr/bin/llc-5.0    
 # User packages to be built.
 # Various formats can be used as shown in the example below.
@@ -42,6 +42,8 @@ packages:
 # using the same syntax as the packages field.
 # (e.g., acme-missiles-0.3)
 # extra-deps: []
+#- haskell-src-exts-1.13.5@sha256:b81787ad844c8ce1fe550eb0d2f7dfb32a56f3b58163ae91c55c00cd52a76af1
+#- regexpr-0.5.4@sha256:a942463f1f25638c81b1c1feab5f958f6f404114113b7788f6a7db95f60e5fe2
 
 # Override default flag values for local packages and extra-deps
 # flags: {}

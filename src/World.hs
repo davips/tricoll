@@ -9,20 +9,20 @@ data Obj = Ball {oid :: Int, radius :: Double, mass :: Double, pos :: V3 Double,
 instance Eq Obj where
     x == y = oid x == oid y
 
-data State = State Double [Obj]
+data State = State Double [Obj] Int
 data Hit = Hit {objA :: Obj, objB :: Obj, timeLeft :: Double} deriving (Show, Generic, NFData)
 
 width :: Double
 width = 3
 
 world :: [Obj]
-world = sphere 10 0.2 0.04 ++ balls 0 ++ sphere 5000 0.1 0.04 ++ sphere 10000 0.15 0.01 ++ sphere 15000 0.15 0.08
+world = sphere 10 0.6 0.04 -- balls 0 ++ sphere 5000 0.1 0.04 ++ sphere 10000 0.15 0.2 ++ sphere 15000 0.15 0.01
 
 sphere :: Int -> Double -> Double -> [Obj]
 sphere idn rad atomR = ring idn rad atomR
 
 ring :: Int -> Double -> Double -> [Obj]
-ring idn rad r = [Ball (idn + i) r 1 (V3 (x i) 0 (y i)) (V3 (y i) 0.1 (x i)) | i <- [1..n]]
+ring idn rad r = [Ball (idn + i) r 1 (V3 (x i) 0 (y i)) (V3 0.1 0 0) | i <- [1..n]]
     where     
         n = round $ 2 * pi * rad / (1.9*r)
         arc = 2 * pi / (fromIntegral n)

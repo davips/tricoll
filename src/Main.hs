@@ -1,25 +1,20 @@
 {-# OPTIONS_GHC -Wall #-}
-{-
-TODO
- create data structure to avoid useless recalculation of distant collisions (using arrays or minheap? implement in C or Haskell?)
- consider mass in collisions
- ball generator with auto mass calculator
- add gravity
--}
 module Main where
 import Draw
 import Physics
 import World
 import Vis
+import Debug
+import GHC.Float
 
 state0 :: State
-state0 = State 0 world
+state0 = State 0 world 0
 
 simFun :: Float -> State -> State
-simFun tFloat (State t0 objs0) = State t objs
+simFun tFloat (State t0 objs0 frames) = State t objs $ frames + 1
   where
-    t = realToFrac tFloat    
-    dt = t - t0
+    t = float2Double tFloat    
+    dt = if t < 1000000 then t - t0 else error "interrompido!"
     objs = advance dt objs0
     
 main :: IO ()

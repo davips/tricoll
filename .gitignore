@@ -1,2 +1,5 @@
 dist
 .stack-work
+.stack-work-profile
+tricoll.prof
+tricoll.prof.html
