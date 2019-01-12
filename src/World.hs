@@ -16,13 +16,13 @@ width :: Double
 width = 3
 
 world :: [Obj]
-world = sphere 10 0.6 0.04 -- balls 0 ++ sphere 5000 0.1 0.04 ++ sphere 10000 0.15 0.2 ++ sphere 15000 0.15 0.01
+world = sphere 10 0.8 0.08 ++ [Ball (1) 0.25 ((4/3) * pi * 0.25^3) (V3 (-1) (-1) (-0.2)) (V3 (0.5) 0.75 0.04)]  -- ++ balls 0 -- ++ sphere 5000 0.1 0.04 ++ sphere 10000 0.15 0.2 ++ sphere 15000 0.15 0.01
 
 sphere :: Int -> Double -> Double -> [Obj]
 sphere idn rad atomR = ring idn rad atomR
 
 ring :: Int -> Double -> Double -> [Obj]
-ring idn rad r = [Ball (idn + i) r 1 (V3 (x i) 0 (y i)) (V3 0.1 0 0) | i <- [1..n]]
+ring idn rad r = [Ball (idn + i) r ((4/3) * pi * r^3) (V3 (x i) 0 (y i)) (V3 0 0 0) | i <- [1..n]]
     where     
         n = round $ 2 * pi * rad / (1.9*r)
         arc = 2 * pi / (fromIntegral n)
@@ -30,10 +30,9 @@ ring idn rad r = [Ball (idn + i) r 1 (V3 (x i) 0 (y i)) (V3 0.1 0 0) | i <- [1..
         y i = rad * (sin $ (fromIntegral i) * arc)
 
 balls :: Int -> [Obj]
-balls i = [ Ball (i+1) 0.231 0.4 (V3 0.39 0 0.5) (V3 0.01 0.01 0.007)
-        , Ball (i+2) 0.34 0.8 (V3 0.5 0.39 0.3) (V3 (-0.01) 0.01 0.01)
-        , Ball (i+3) 0.23 0.8 (V3 (-0.1) (-0.25) (-0.2)) (V3 (0.009) 0.01 0.004)
-        , Ball (i+4) 0.243 0.8 (V3 (-0.4) 0 0.39) (V3 (0.1) 0.01 0.02)
+balls i = [ Ball (i+2) 1 1  (V3 0.5 0.5 0.3) (V3 (-0.01) 0.01 0.01)
+          , Ball (i+3) 0.03 0.03 (V3 (-1) (-1) (-0.2)) (V3 (1) 1 0.004)
+--         , Ball (i+4) 0.243 0.8 (V3 (-0.4) 0 0.39) (V3 (0.1) 0.01 0.02)
         ]
 
 walls :: [Obj]

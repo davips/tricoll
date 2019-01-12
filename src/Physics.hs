@@ -62,11 +62,12 @@ doHit (Ball ia ra ma pa va) (Ball ib rb mb pb vb) = [Ball ia ra ma pa va', Ball 
     where
         ab = pa - pb
         abUnit = ab ^/ norm ab
-        aOut = (abUnit `dot` va) *^ abUnit
-        bOut = (abUnit `dot` vb) *^ abUnit
-        va' = va - aOut + bOut
-        vb' = vb - bOut + aOut
-doHit (Ball ia ra ma pa va) (Wall _ n) = {-d2 (error "bateu!" :: Double)-} [walk (0.00000001) $ Ball ia ra ma pa (va * ((V3 1 1 1) - 2*n*n))]
+        uva = abUnit `dot` va
+        uvb = abUnit `dot` vb
+        p = 2 * (uva - uvb) / (ma + mb)
+        va' = va - p * mb *^ abUnit
+        vb' = vb + p * ma *^ abUnit
+doHit (Ball ia ra ma pa va) (Wall _ n) = {-d2 (error "bateu!" :: Double)-} [Ball ia ra ma pa (va * ((V3 1 1 1) - 2*n*n))]
 doHit (Wall _ _) _ = error "Walls are not allowed in the first argument of doHit!"
 
 walk :: Double -> Obj -> Obj
