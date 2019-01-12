@@ -1,7 +1,7 @@
 # Revision history for tricoll
 
 ## TODO
-* fix increase of energy/speed during simulation
+* fix increase of total energy (kinetic + potential) during simulation with gravity (at least, kinectic stays constant withou gravity)
 * add friction (loss of energy as heat in collisions)
 * optimize
     use min(Ax-Bx, Ay-By) / (Va-Vb) as a rough estimate of t

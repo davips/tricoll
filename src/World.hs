@@ -16,16 +16,16 @@ width :: Double
 width = 400
 
 g :: V3 Double
-g = V3 0 (-9.80665) 0
+g = V3 0 (1* (-9.80665)) 0
 
 world :: [Obj]
-world = sphere 10 80 8 ++ [Ball (1) 20 ((4/3) * pi * 0.25^3) (V3 (0.1) (0) (0)) (V3 (0) 0 0)] -- ++ balls 0 -- ++ sphere 5000 0.1 0.04 ++ sphere 10000 0.15 0.2 ++ sphere 15000 0.15 0.01
+world = [Ball (1) 20 ((4/3) * pi * 20^3) (V3 (0.1) (150) (0)) (V3 (0) 0 0)] -- ++ balls 0 -- ++ sphere 5000 0.1 0.04 ++ sphere 10000 0.15 0.2 ++ sphere 15000 0.15 0.01 ++ sphere 10 80 8 ++ 
 
 sphere :: Int -> Double -> Double -> [Obj]
 sphere idn rad atomR = ring idn rad atomR
 
 ring :: Int -> Double -> Double -> [Obj]
-ring idn rad r = [Ball (idn + i) r ((4/3) * pi * r^3) (V3 (x i) 0 (y i)) (V3 0 0 0) | i <- [1..n]]
+ring idn rad r = [Ball (idn + i) r ((4/3) * pi * r^3) (V3 (x i) 150 (y i)) (V3 0 0 0) | i <- [1..n]]
     where     
         n = round $ 2 * pi * rad / (1.9*r)
         arc = 2 * pi / (fromIntegral n)
