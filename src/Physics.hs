@@ -4,7 +4,7 @@ import World
 import Data.Maybe
 import Data.List
 import Control.Parallel.Strategies(parMap, rdeepseq)
--- import Debug
+import Debug
 
 hit :: Obj -> Obj -> Hit    -- 70%
 hit a@(Ball _ ra _ pa va) b@(Ball _ rb _ pb vb) = Hit a b t
@@ -44,8 +44,8 @@ advance dt objs
         timeToHit = minimum $ map timeLeft hits
         nextHits = filter (\h -> timeLeft h == timeToHit) hits -- TODO: do take advantage of precalculated hits? there are a lot of them that are non-affected by the very next hit (nextHits)
  
-positivate :: Double -> Double -- report a bit less than the required time to avoid one object exceding the boundary of the other due to floating point precision issues
-positivate t = if t <= 0 then 1 / 0 else 0.999999 * t -- when the objects are too close, the hit may be skipped
+positivate :: Double -> Double
+positivate t = if t <= 0 then 1 / 0 else 0.9999999 * t -- fromIntegral (floor $ t * 1000000) / 1000000
 
 doHits :: [Hit] -> [Obj] -> [Obj]
 doHits [] objs = objs
@@ -57,7 +57,7 @@ doHits (Hit oldA oldB _ : htail) objs = doHits htail objs'
         collided = doHit a b
         objs' = collided ++ filter (\x -> x /= a && x /= b) objs
 
-doHit :: Obj -> Obj -> [Obj] -- TODO: verify if simultaneous hits are problematic. Maybe postpone "walk (0.00000001)" to be done as a batch after doHits call.
+doHit :: Obj -> Obj -> [Obj] -- TODO: verify if hit still need to be performed (due to a previous hit from a third object)
 doHit (Ball ia ra ma pa va) (Ball ib rb mb pb vb) = [Ball ia ra ma pa va', Ball ib rb mb pb vb']
     where
         ab = pa - pb
@@ -67,7 +67,9 @@ doHit (Ball ia ra ma pa va) (Ball ib rb mb pb vb) = [Ball ia ra ma pa va', Ball 
         p = elasticity * 2 * (uva - uvb) / (ma + mb)
         va' = va - p * mb *^ abUnit
         vb' = vb + p * ma *^ abUnit
-doHit (Ball ia ra ma pa va) (Wall _ n) = {-d2 (error "bateu!" :: Double)-} [Ball ia ra ma pa (elasticity *^ va * ((V3 1 1 1) - 2*n*n))]
+doHit (Ball ia ra ma pa va) (Wall _ n) = [Ball ia ra ma pa (elasticity *^ va * inv)] -- TODO: correct elasticity loss
+    where
+        inv = (V3 1 1 1) - 2*n*n
 doHit (Wall _ _) _ = error "Walls are not allowed in the first argument of doHit!"
 
 walk :: Double -> Obj -> Obj
@@ -76,7 +78,7 @@ walk dt (Ball i r m p v) = Ball i r m p' v'
         p' = p + (dt) *^ v + g ^* (dt^2/2)
         v0 = v + (g ^* dt)
         v' = v0
---         v' = if norm v0 < 0.00000001 then V3 0 0 0 else v'
+--         v' = if norm v0 < 0.00000001 then V3 0 0 0 else v0
 walk _ w@(Wall _ _) = w
 
 kenergy :: [Obj] -> Double
@@ -87,9 +89,5 @@ kenergy objs = sum $ map ke objs
 penergy :: [Obj] -> Double
 penergy objs = sum $ map pe objs
     where
-        pe (Ball _ r m (V3 _ y _) _) = abs $ m * (norm g) * ((width / 2) + y - r)
-
-{-qmov :: [Obj] -> Double
-qmov objs = sum $ map ke objs
-    where
-        ke (Ball _ _ m _ v) = abs $ m * (norm v) ^ 2 / 2-}        
+        pe (Ball _ r m (V3 _ y _) _) = abs $ m * (norm g) * h
+        h = (width / 2) + y - r
