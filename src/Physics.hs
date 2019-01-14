@@ -89,5 +89,5 @@ kenergy objs = sum $ map ke objs
 penergy :: [Obj] -> Double
 penergy objs = sum $ map pe objs
     where
-        pe (Ball _ r m (V3 _ y _) _) = abs $ m * (norm g) * h
-        h = (width / 2) + y - r
+        pe (Ball _ r m (V3 _ y _) _) = abs $ m * (norm g) * h y r
+        h y r = (width / 2) + y - r

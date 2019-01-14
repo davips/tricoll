@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/tricoll.iml" filepath="$PROJECT_DIR$/.idea/tricoll.iml" />
+      <module fileurl="file://$PROJECT_DIR$/tricoll.iml" filepath="$PROJECT_DIR$/tricoll.iml" />
     </modules>
   </component>
 </project>
