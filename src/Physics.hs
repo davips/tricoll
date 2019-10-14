@@ -33,10 +33,10 @@ advance dt objs
     | dt < 0 = error "time travel detected!"
     | dt == 0 = objs
     | timeToHit <= dt = advance (dt - timeToHit) $ doHits nextHits $ map (walk timeToHit) objs
-    | otherwise = map (walk dt) $ objs
+    | otherwise = map (walk dt) objs
     where
 --         hits = parMap rdeepseq id [hit a b | a <- objs, b <- objs ++ walls, oid a < oid b]
-        hits = concat $ paralellize
+        hits = concat paralellize
         paralellize = parMap rdeepseq combine objs
         combine a = [hit a b | b <- allo, oid a < oid b] -- TODO: combinations (of ids/Ints) can be calculated globally once (if there was an array of Objs)
         allo = objs ++ walls
@@ -68,8 +68,9 @@ doHit (Ball ia ra ma pa va) (Ball ib rb mb pb vb) = [Ball ia ra ma pa va', Ball 
         va' = va - p * mb *^ abUnit
         vb' = vb + p * ma *^ abUnit
 doHit (Ball ia ra ma pa va) (Wall _ n) = [Ball ia ra ma pa (elasticity *^ va * inv)] -- TODO: correct elasticity loss
-    where
-        inv = (V3 1 1 1) - 2*n*n
+  where
+    inv = V3 1 1 1 - 2 * n * n
+    inv = V3 1 1 1 - 2 * n * n
 doHit (Wall _ _) _ = error "Walls are not allowed in the first argument of doHit!"
 
 walk :: Double -> Obj -> Obj
